@@ -1,21 +1,28 @@
-namespace Pieces
+using System.Collections.Generic;
+using UnityEngine;
+
+public class King : Piece
 {
-    public class King : Piece
+    public override List<Vector2Int> GetLegalMoves()
     {
-         
-        protected override void CheckLegalMoves()
+        List<Vector2Int> legalMoves = new List<Vector2Int>();
+        Vector2Int[] directions = {
+            Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
+            new Vector2Int(1, 1), new Vector2Int(-1, 1),
+            new Vector2Int(1, -1), new Vector2Int(-1, -1)
+        };
+
+        foreach (var dir in directions)
         {
-            
+            Vector2Int target = BoardPosition + dir;
+            if (!Board.IsInsideBoard(target)) continue;
+
+            if (Board.IsEmpty(target) || Board.IsEnemy(target, color))
+                legalMoves.Add(target);
         }
 
-        protected override void Move(int move)
-        {
-            
-        }
+        // TODO: Castling logic (requires tracking moved status)
         
-        protected override void Attack(int attack)
-        {
-            
-        }
+        return legalMoves;
     }
 }

@@ -1,54 +1,56 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Pieces
+public abstract class Piece : MonoBehaviour
 {
-    public class Piece : MonoBehaviour
+    public enum Type { Pawn, Rook, Knight, Bishop, Queen, King }
+    public enum Color { White, Black }
+
+    public Type type;
+    public Color color;
+
+    protected Board Board;
+
+    public Vector2Int BoardPosition { get; protected set; }
+
+    protected virtual void Start()
     {
-        protected Board Board;
-        
-        public enum Type
-        {
-            Pawn,
-            Rook,
-            Knight,
-            Bishop,
-            King,
-            Queen
-        } 
-        public enum Color
-        {
-            Black,
-            White
-        }
-    
-        public Type type;
-        public Color color;
-        
-        protected int BoardPosition;
+        Board = FindFirstObjectByType<Board>();
+        SyncWithTransform();
+    }
 
-        private void Start()
-        {
-            Board = GetComponentInParent<Board>();
+    // Finds closest tile to current transform and updates logical position
+    protected void SyncWithTransform()
+    {
+        float minDist = float.MaxValue;
+        Vector2Int closest = Vector2Int.zero;
 
-            GetInitialPositions();
-            
-        }
-        private void GetInitialPositions()
+        for (int x = 0; x < 8; x++)
         {
-            for (int i = 0; i < Board.positions.Length; i++)
+            for (int y = 0; y < 8; y++)
             {
-                if (Board.positions[i].localPosition == transform.localPosition)
+                float dist = Vector3.Distance(transform.position, Board.positions[x, y].position);
+                if (dist < minDist)
                 {
-                    BoardPosition = i;
+                    minDist = dist;
+                    closest = new Vector2Int(x, y);
                 }
             }
         }
-        
-        
-        
-        protected virtual void CheckLegalMoves(){}
-        protected virtual void Move(int move){}
-        protected virtual void Attack(int attack){}
 
+        BoardPosition = closest;
+        transform.position = Board.positions[BoardPosition.x, BoardPosition.y].position;
+    }
+
+    // Override in subclasses
+    public abstract List<Vector2Int> GetLegalMoves();
+
+    // Moves piece to a new position and updates transform
+    public void Move(Vector2Int newPos)
+    {
+        if (!Board.IsInsideBoard(newPos)) return;
+
+        BoardPosition = newPos;
+        transform.position = Board.GetTileAt(newPos).position;
     }
 }

@@ -1,21 +1,32 @@
-namespace Pieces
-{
-    public class Rook : Piece
-    {
-        
-        protected override void CheckLegalMoves()
-        {
-            
-        }
-        
-        protected override void Move(int move)
-        {
+using System.Collections.Generic;
+using UnityEngine;
 
-        }
-        
-        protected override void Attack(int attack)
+public class Rook : Piece
+{
+    public override List<Vector2Int> GetLegalMoves()
+    {
+        List<Vector2Int> legalMoves = new List<Vector2Int>();
+        Vector2Int[] directions = {
+            Vector2Int.up, Vector2Int.down,
+            Vector2Int.left, Vector2Int.right
+        };
+
+        foreach (var dir in directions)
         {
-            
+            Vector2Int current = BoardPosition + dir;
+            while (Board.IsInsideBoard(current))
+            {
+                if (Board.IsEmpty(current))
+                    legalMoves.Add(current);
+                else
+                {
+                    if (Board.IsEnemy(current, color))
+                        legalMoves.Add(current);
+                    break;
+                }
+                current += dir;
+            }
         }
+        return legalMoves;
     }
 }
