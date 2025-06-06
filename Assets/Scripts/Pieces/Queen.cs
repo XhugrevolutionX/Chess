@@ -28,6 +28,7 @@ public class Queen : Piece
                 current += dir;
             }
         }
+        
         return legalMoves;
     }
 }

@@ -10,6 +10,14 @@ public class Board : MonoBehaviour
     
     public List<Piece> whitePieces = new List<Piece>();
     public List<Piece> blackPieces = new List<Piece>();
+    
+    public Vector2Int? enPassantTargetSquare = null;
+    
+    public GameObject whiteQueenPrefab;
+    public GameObject blackQueenPrefab;
+    
+    public Transform whiteParent;
+    public Transform blackParent;
 
     private void Awake()
     {
@@ -44,8 +52,7 @@ public class Board : MonoBehaviour
     // Get the piece (if any) located at a given board position
     public Piece GetPieceAt(Vector2Int pos)
     {
-        return whitePieces.Concat(blackPieces)
-            .FirstOrDefault(piece => piece.BoardPosition == pos);
+        return whitePieces.Concat(blackPieces).FirstOrDefault(piece => piece.BoardPosition == pos);
     }
 
     // Is this square empty?
@@ -71,4 +78,18 @@ public class Board : MonoBehaviour
 
         Destroy(piece.gameObject);
     }
+    
+
+    public Vector2Int GetKingPosition(Piece.Color color)
+    {
+        var pieces = (color == Piece.Color.White) ? whitePieces : blackPieces;
+        foreach (var p in pieces)
+        {
+            if (p != null && p.type == Piece.Type.King)
+                return p.BoardPosition;
+        }
+        return new Vector2Int(-1, -1);
+    }
+
+    
 }

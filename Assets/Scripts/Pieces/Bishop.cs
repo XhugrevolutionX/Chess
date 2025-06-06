@@ -27,6 +27,7 @@ public class Bishop : Piece
                 current += dir;
             }
         }
+        
         return legalMoves;
     }
 }

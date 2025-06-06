@@ -9,10 +9,12 @@ public abstract class Piece : MonoBehaviour
     public Type type;
     public Color color;
 
-    protected Board Board;
-
     public Vector2Int BoardPosition { get; protected set; }
+    public Board Board { get; set; }
+    
+    public bool HasMoved { get; protected set; } = false;
 
+    
     protected virtual void Start()
     {
         Board = FindFirstObjectByType<Board>();
@@ -41,16 +43,20 @@ public abstract class Piece : MonoBehaviour
         BoardPosition = closest;
         transform.position = Board.positions[BoardPosition.x, BoardPosition.y].position;
     }
+    
 
     // Override in subclasses
-    public abstract List<Vector2Int> GetLegalMoves();
+    public virtual List<Vector2Int> GetLegalMoves() { return new List<Vector2Int>(); }
+
 
     // Moves piece to a new position and updates transform
-    public void Move(Vector2Int newPos)
+    public virtual void Move(Vector2Int newPos)
     {
         if (!Board.IsInsideBoard(newPos)) return;
 
         BoardPosition = newPos;
         transform.position = Board.GetTileAt(newPos).position;
+        HasMoved = true;
     }
+
 }

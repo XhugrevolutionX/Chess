@@ -27,6 +27,7 @@ public class Rook : Piece
                 current += dir;
             }
         }
+        
         return legalMoves;
     }
 }

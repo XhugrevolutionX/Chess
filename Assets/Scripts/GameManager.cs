@@ -111,10 +111,12 @@ public class GameManager : MonoBehaviour
 
         selectedPiece.Move(newPos);
         legalMoves.Clear();
-        selectedPiece = null;
+
 
         ClearHighlights();
         SwitchTurn();
+        
+        selectedPiece = null;
     }
 
     Vector2Int GetBoardPositionFromTile(Transform tile)
