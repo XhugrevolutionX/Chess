@@ -68,7 +68,7 @@ public class Board : MonoBehaviour
         return piece != null && piece.color != myColor;
     }
 
-    // Optionally: remove captured pieces
+    // Remove captured pieces
     public void RemovePiece(Piece piece)
     {
         if (piece.color == Piece.Color.White)
@@ -78,18 +78,4 @@ public class Board : MonoBehaviour
 
         Destroy(piece.gameObject);
     }
-    
-
-    public Vector2Int GetKingPosition(Piece.Color color)
-    {
-        var pieces = (color == Piece.Color.White) ? whitePieces : blackPieces;
-        foreach (var p in pieces)
-        {
-            if (p != null && p.type == Piece.Type.King)
-                return p.BoardPosition;
-        }
-        return new Vector2Int(-1, -1);
-    }
-
-    
 }

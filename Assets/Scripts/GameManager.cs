@@ -110,10 +110,10 @@ public class GameManager : MonoBehaviour
         }
 
         selectedPiece.Move(newPos);
+        
         legalMoves.Clear();
-
-
         ClearHighlights();
+        
         SwitchTurn();
         
         selectedPiece = null;
