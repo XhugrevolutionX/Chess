@@ -141,13 +141,13 @@ public class GameManager : MonoBehaviour
         {
             Transform tileTransform = board.positions[move.x, move.y];
             GameObject highlight;
-            if (board.IsEmpty(move))
+            if (!board.IsEmpty(move) || move == board.enPassantTargetSquare)
             {
-                highlight = Instantiate(moveHighlightPrefab, tileTransform.position + Vector3.up * highlightsOffset, Quaternion.identity);
+                highlight = Instantiate(attackHighlightPrefab, tileTransform.position + Vector3.up * highlightsOffset, Quaternion.identity);
             }
             else
             {
-                highlight = Instantiate(attackHighlightPrefab, tileTransform.position + Vector3.up * highlightsOffset, Quaternion.identity);
+                highlight = Instantiate(moveHighlightPrefab, tileTransform.position + Vector3.up * highlightsOffset, Quaternion.identity);
             }
             currentHighlights.Add(highlight);
         }
