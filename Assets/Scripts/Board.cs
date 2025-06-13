@@ -78,4 +78,73 @@ public class Board : MonoBehaviour
 
         Destroy(piece.gameObject);
     }
+    
+    public bool IsTileUnderAttack(Vector2Int pos, Piece.Color byColor)
+    {
+        var attackers = (byColor == Piece.Color.White) ? whitePieces : blackPieces;
+
+        foreach (var piece in attackers)
+        {
+            if (piece != null && piece.GetRawMoves().Contains(pos))
+                return true;
+        }
+        return false;
+    }
+    
+    public Vector2Int GetKingPosition(Piece.Color color)
+    {
+        List<Piece> pieces = (color == Piece.Color.White) ? whitePieces : blackPieces;
+
+        foreach (var piece in pieces)
+        {
+            if (piece != null && piece.type == Piece.Type.King)
+            {
+                return piece.BoardPosition;
+            }
+        }
+
+        return new Vector2Int(-1, -1); // fallback
+    }
+    
+    public bool WouldKingBeInCheckAfterMove(Piece piece, Vector2Int targetPos)
+    {
+        Vector2Int originalPos = piece.BoardPosition;
+        Piece capturedPiece = GetPieceAt(targetPos);
+
+        // Temporarily move the piece
+        piece.transform.position = positions[targetPos.x, targetPos.y].position;
+        piece.SyncWithTransform();
+
+        if (capturedPiece != null)
+            capturedPiece.gameObject.SetActive(false);
+
+        Vector2Int kingPos = GetKingPosition(piece.color);
+        bool isInCheck = IsTileUnderAttack(kingPos, piece.color == Piece.Color.White ? Piece.Color.Black : Piece.Color.White);
+
+        // Revert
+        piece.transform.position = positions[originalPos.x, originalPos.y].position;
+        piece.SyncWithTransform();
+
+        if (capturedPiece != null)
+            capturedPiece.gameObject.SetActive(true);
+
+        return isInCheck;
+    }
+    
+    public bool HasLegalMoves(Piece.Color color)
+    {
+        List<Piece> pieces = (color == Piece.Color.White) ? whitePieces : blackPieces;
+
+        foreach (var piece in pieces)
+        {
+            if (piece == null || !piece.gameObject.activeSelf)
+                continue;
+
+            var legalMoves = piece.GetLegalMoves();
+            if (legalMoves != null && legalMoves.Count > 0)
+                return true;
+        }
+
+        return false;
+    }
 }

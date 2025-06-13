@@ -5337,7 +5337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4c14c85c2059c84f9533bcbd4bf8d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 5
+  type: 4
   color: 0
 --- !u!23 &1282000833537073124
 MeshRenderer:
@@ -5505,7 +5505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38419b436a4e44147aaa7d142a94cb3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  type: 5
   color: 1
 --- !u!23 &1982994844688303760
 MeshRenderer:
@@ -7596,7 +7596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4c14c85c2059c84f9533bcbd4bf8d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 5
+  type: 4
   color: 1
 --- !u!23 &7186791436544726356
 MeshRenderer:
@@ -9061,7 +9061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38419b436a4e44147aaa7d142a94cb3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  type: 5
   color: 0
 --- !u!23 &9175407791442710433
 MeshRenderer:

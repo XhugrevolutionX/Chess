@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class King : Piece
 {
-    public override List<Vector2Int> GetLegalMoves()
+    public override List<Vector2Int> GetRawMoves()
     {
-        List<Vector2Int> legalMoves = new();
+        List<Vector2Int> moves = new();
 
         Vector2Int[] directions = {
             new(1, 0), new(-1, 0), new(0, 1), new(0, -1),
@@ -18,16 +18,21 @@ public class King : Piece
             if (Board.IsInsideBoard(target))
             {
                 Piece other = Board.GetPieceAt(target);
-                if ((other == null || other.color != color))
+                if (other == null || other.color != color)
                 {
-                    legalMoves.Add(target);
+                    moves.Add(target);
                 }
             }
         }
 
-        legalMoves.AddRange(GetCastlingMoves());
-       
-        return legalMoves;
+        return moves;
+    }
+    
+    public override List<Vector2Int> GetLegalMoves()
+    {
+        var legal = base.GetLegalMoves();
+        legal.AddRange(GetCastlingMoves()); // Only if king is not in check
+        return legal;
     }
     
     private List<Vector2Int> GetCastlingMoves()

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Knight : Piece
 {
-    public override List<Vector2Int> GetLegalMoves()
+    public override List<Vector2Int> GetRawMoves()
     {
         List<Vector2Int> legalMoves = new List<Vector2Int>();
         Vector2Int[] deltas = {
@@ -22,4 +22,5 @@ public class Knight : Piece
         
         return legalMoves;
     }
+
 }

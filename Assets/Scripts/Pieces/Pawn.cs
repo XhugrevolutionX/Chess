@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Pawn : Piece
 {
-    public override List<Vector2Int> GetLegalMoves()
+    public override List<Vector2Int> GetRawMoves()
     {
         List<Vector2Int> legalMoves = new();
         int dir = (color == Color.White) ? 1 : -1;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Queen : Piece
 {
-    public override List<Vector2Int> GetLegalMoves()
+    public override List<Vector2Int> GetRawMoves()
     {
         List<Vector2Int> legalMoves = new List<Vector2Int>();
         Vector2Int[] directions = {
@@ -31,4 +31,5 @@ public class Queen : Piece
         
         return legalMoves;
     }
+
 }

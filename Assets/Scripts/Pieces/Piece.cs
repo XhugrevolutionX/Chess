@@ -22,7 +22,7 @@ public abstract class Piece : MonoBehaviour
     }
 
     // Finds closest tile to current transform and updates logical position
-    protected void SyncWithTransform()
+    public void SyncWithTransform()
     {
         float minDist = float.MaxValue;
         Vector2Int closest = Vector2Int.zero;
@@ -46,7 +46,20 @@ public abstract class Piece : MonoBehaviour
     
 
     // Override in subclasses
-    public virtual List<Vector2Int> GetLegalMoves() { return new List<Vector2Int>(); }
+    public virtual List<Vector2Int> GetLegalMoves()
+    {
+        List<Vector2Int> rawMoves = GetRawMoves(); 
+        List<Vector2Int> legalMoves = new();
+
+        foreach (var move in rawMoves)
+        {
+            if (!Board.WouldKingBeInCheckAfterMove(this, move))
+                legalMoves.Add(move);
+        }
+
+        return legalMoves;
+    }
+    public virtual List<Vector2Int> GetRawMoves() { return new List<Vector2Int>(); }
 
 
     // Moves piece to a new position and updates transform

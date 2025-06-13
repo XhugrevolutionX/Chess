@@ -113,7 +113,10 @@ public class GameManager : MonoBehaviour
         
         legalMoves.Clear();
         ClearHighlights();
+
         
+        CheckEndGame();
+            
         SwitchTurn();
         
         selectedPiece = null;
@@ -169,5 +172,30 @@ public class GameManager : MonoBehaviour
     {
         if (turnDisplay != null)
             turnDisplay.text = "Turn: " + currentTurn.ToString();
+    }
+    
+    private void CheckEndGame()
+    {
+        Piece.Color currentColor = currentTurn == PlayerTurn.White ? Piece.Color.White : Piece.Color.Black;
+        Piece.Color opponentColor = currentColor == Piece.Color.White ? Piece.Color.Black : Piece.Color.White;
+
+        Vector2Int kingPos = board.GetKingPosition(opponentColor);
+        bool inCheck = board.IsTileUnderAttack(kingPos, currentColor);
+        bool hasMoves = board.HasLegalMoves(opponentColor);
+
+        if (!hasMoves)
+        {
+            if (inCheck)
+            {
+                Debug.Log($"Checkmate! {currentTurn} wins.");
+                // TODO: Disable further interaction / show UI
+            }
+            else
+            {
+                Debug.Log("Stalemate!");
+                // TODO: Handle stalemate scenario
+            }
+            return;
+        }
     }
 }
