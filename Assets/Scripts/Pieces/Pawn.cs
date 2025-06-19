@@ -38,7 +38,10 @@ public class Pawn : Piece
             }
             else if (Board.enPassantTargetSquare.HasValue && pos == Board.enPassantTargetSquare.Value)
             {
-                legalMoves.Add(pos);
+                if (Board.enPassantTargetPiece.color != color)
+                {
+                    legalMoves.Add(pos);
+                }
             }
         }
         
@@ -53,11 +56,14 @@ public class Pawn : Piece
         // Check en passant capture
         if (Board.enPassantTargetSquare.HasValue && newPos == Board.enPassantTargetSquare.Value)
         {
-            Vector2Int capturedPos = new Vector2Int(newPos.x, newPos.y - dir);
-            Piece captured = Board.GetPieceAt(capturedPos);
-            if (captured != null && captured is Pawn)
+            if (Board.enPassantTargetPiece.color != color)
             {
-                Board.RemovePiece(captured);
+                Vector2Int capturedPos = new Vector2Int(newPos.x, newPos.y - dir);
+                Piece captured = Board.GetPieceAt(capturedPos);
+                if (captured != null && captured is Pawn)
+                {
+                    Board.RemovePiece(captured);
+                }
             }
         }
 
@@ -65,6 +71,7 @@ public class Pawn : Piece
         if (Mathf.Abs(newPos.y - from.y) == 2)
         {
             Board.enPassantTargetSquare = new Vector2Int(from.x, from.y + dir);
+            Board.enPassantTargetPiece = this;
         }
         else
         {

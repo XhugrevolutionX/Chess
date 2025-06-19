@@ -44,6 +44,11 @@ public abstract class Piece : MonoBehaviour
         transform.position = Board.positions[BoardPosition.x, BoardPosition.y].position;
     }
     
+    public void SetPositionDirect(Vector2Int pos)
+    {
+        BoardPosition = pos;
+        transform.position = Board.positions[pos.x, pos.y].position;
+    }
 
     // Override in subclasses
     public virtual List<Vector2Int> GetLegalMoves()
@@ -59,6 +64,7 @@ public abstract class Piece : MonoBehaviour
 
         return legalMoves;
     }
+    
     public virtual List<Vector2Int> GetRawMoves() { return new List<Vector2Int>(); }
 
 
@@ -71,5 +77,10 @@ public abstract class Piece : MonoBehaviour
         transform.position = Board.GetTileAt(newPos).position;
         HasMoved = true;
     }
-
+    
+    public void UpdateBoardPositionForSimulation(Vector2Int newPos)
+    {
+        BoardPosition = newPos;
+        transform.position = Board.positions[newPos.x, newPos.y].position;
+    }
 }

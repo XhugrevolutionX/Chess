@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
         {
             Transform tileTransform = board.positions[move.x, move.y];
             GameObject highlight;
-            if (!board.IsEmpty(move) || move == board.enPassantTargetSquare)
+            if (!board.IsEmpty(move) || move == board.enPassantTargetSquare && selectedPiece.type == Piece.Type.Pawn)
             {
                 highlight = Instantiate(attackHighlightPrefab, tileTransform.position + Vector3.up * highlightsOffset, Quaternion.identity);
             }

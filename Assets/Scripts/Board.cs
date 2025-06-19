@@ -12,6 +12,7 @@ public class Board : MonoBehaviour
     public List<Piece> blackPieces = new List<Piece>();
     
     public Vector2Int? enPassantTargetSquare = null;
+    public Piece? enPassantTargetPiece = null;
     
     public GameObject whiteQueenPrefab;
     public GameObject blackQueenPrefab;
@@ -111,22 +112,23 @@ public class Board : MonoBehaviour
         Vector2Int originalPos = piece.BoardPosition;
         Piece capturedPiece = GetPieceAt(targetPos);
 
-        // Temporarily move the piece
-        piece.transform.position = positions[targetPos.x, targetPos.y].position;
-        piece.SyncWithTransform();
-
+        // Remove captured piece from active list and deactivate
         if (capturedPiece != null)
-            capturedPiece.gameObject.SetActive(false);
+            RemovePieceFromActiveList(capturedPiece);
 
+        // Temporarily move piece
+        piece.UpdateBoardPositionForSimulation(targetPos);
+
+        // Check if king is in check
         Vector2Int kingPos = GetKingPosition(piece.color);
         bool isInCheck = IsTileUnderAttack(kingPos, piece.color == Piece.Color.White ? Piece.Color.Black : Piece.Color.White);
 
-        // Revert
-        piece.transform.position = positions[originalPos.x, originalPos.y].position;
-        piece.SyncWithTransform();
+        // Revert piece position
+        piece.UpdateBoardPositionForSimulation(originalPos);
 
+        // Restore captured piece
         if (capturedPiece != null)
-            capturedPiece.gameObject.SetActive(true);
+            AddPieceToActiveList(capturedPiece);
 
         return isInCheck;
     }
@@ -146,5 +148,29 @@ public class Board : MonoBehaviour
         }
 
         return false;
+    }
+    
+    public void RemovePieceFromActiveList(Piece piece)
+    {
+        if (piece == null) return;
+
+        if (piece.color == Piece.Color.White)
+            whitePieces.Remove(piece);
+        else
+            blackPieces.Remove(piece);
+
+        piece.gameObject.SetActive(false);
+    }
+
+    public void AddPieceToActiveList(Piece piece)
+    {
+        if (piece == null) return;
+
+        if (piece.color == Piece.Color.White)
+            whitePieces.Add(piece);
+        else
+            blackPieces.Add(piece);
+
+        piece.gameObject.SetActive(true);
     }
 }
